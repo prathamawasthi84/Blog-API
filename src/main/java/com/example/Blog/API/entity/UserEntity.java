@@ -1,5 +1,6 @@
 package com.example.Blog.API.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,16 +9,18 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
 @Entity
+@Table(name = "users")
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank
     private String username;
-    @NotBlank
+
+    @Column(unique = true)
     private String userEmail;
-    @NotBlank
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String userPassword;
+
     public UserEntity(){
 
     }
