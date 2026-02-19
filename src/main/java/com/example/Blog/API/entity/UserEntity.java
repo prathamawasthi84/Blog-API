@@ -1,5 +1,6 @@
 package com.example.Blog.API.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,6 +8,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -20,6 +24,13 @@ public class UserEntity {
     private String userEmail;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String userPassword;
+    @OneToMany(mappedBy = "user" ,cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<PostEntity> postEntities= new ArrayList<>();
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
+    @JsonIgnore
+    private List<CommentEntity> commentEntities= new ArrayList<>();
 
     public UserEntity(){
 
@@ -31,6 +42,12 @@ public class UserEntity {
         this.userPassword=userPassword;
     }
     //Getters
+    public List<CommentEntity> getCommentEntities() {
+        return commentEntities;
+    }
+    public List<PostEntity> getPostEntities() {
+        return postEntities;
+    }
     public Long getId(){
         return id;
     }
@@ -44,6 +61,12 @@ public class UserEntity {
         return userPassword;
     }
     //Setters
+    public void setCommentEntities(List<CommentEntity> commentEntities) {
+        this.commentEntities = commentEntities;
+    }
+    public void setPostEntities(List<PostEntity> postEntities) {
+        this.postEntities = postEntities;
+    }
     public void setId(Long id){
         this.id=id;
     }

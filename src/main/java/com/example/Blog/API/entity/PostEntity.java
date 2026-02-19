@@ -1,8 +1,12 @@
 package com.example.Blog.API.entity;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
@@ -18,6 +22,10 @@ public class PostEntity {
     @ManyToOne
     @JoinColumn(name = "user_Id")
     private UserEntity user;
+
+    @OneToMany(mappedBy = "post" , cascade = CascadeType.ALL,orphanRemoval = true)
+    @JsonIgnore
+    private List<CommentEntity> commentEntities= new ArrayList<>();
     public PostEntity(){
 
     }
@@ -27,6 +35,9 @@ public class PostEntity {
         this.content=content;
     }
     //Getters
+    public List<CommentEntity> getCommentEntities() {
+        return commentEntities;
+    }
     public UserEntity getUser(){
         return user;
     }
@@ -40,6 +51,9 @@ public class PostEntity {
         return content;
     }
     //Setters
+    public void setCommentEntities(List<CommentEntity> commentEntities) {
+        this.commentEntities = commentEntities;
+    }
     public void setUser(UserEntity user){
         this.user=user;
     }
