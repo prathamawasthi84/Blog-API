@@ -1,6 +1,7 @@
 package com.example.Blog.API.service;
 
 import com.example.Blog.API.entity.UserEntity;
+import com.example.Blog.API.exception.ResourceNotFoundException;
 import com.example.Blog.API.respository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -18,9 +19,11 @@ public class UserService {
     }
     public UserEntity registerUser(UserEntity userEntity){
         Optional<UserEntity> existingUser = userRepository.findByUserEmail(userEntity.getUserEmail());
-        if(existingUser.isPresent()){
-            throw new ResponseStatusException(HttpStatus.CONFLICT,"Email Already Registered");
+        if (existingUser.isPresent()) {
+            throw new ResourceNotFoundException(
+                    "Email already registered: " + userEntity.getUserEmail());
         }
+
         else{
            return userRepository.save(userEntity);
         }
